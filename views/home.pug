@@ -1,27 +1,52 @@
 extends layout
 
 block content
-  h1 Basic Nodejs app with auth included, adapted from hacker startup
-  p.lead A boilerplate for Node.js web applications.
-  hr
-  .row
-    .col-md-6
-      h2 Heading
-      p Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.
-      p
-        a.btn.btn-raised(href='#', role='button') View details »
-    .col-md-6
-      h2 Heading
-      p Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.
-      p
-        a.btn.btn-raised(href='#', role='button') View details »
-    .col-md-6
-      h2 Heading
-      p Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.
-      p
-        a.btn.btn-raised(href='#', role='button') View details »
-    .col-md-6
-      h2 Heading
-      p Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.
-      p
-        a.btn.btn-raised(href='#', role='button') View details »
+  
+  .card-deck.border-bottom
+    .card.border-info.mb-3.text-center
+      .card-header.bg-transparent.border-info 
+        h2 HOTELS
+      .card-body.text-info
+        h1.card-title 50
+        i.card-text.fas.fa-hotel.fa-7x
+
+    .card.border-success.mb-3.text-center
+      .card-header.bg-transparent.border-success 
+        h2 ORDERS
+      .card-body.text-success
+        h1.card-title 555
+        i.card-text.fas.fa-truck.fa-7x
+
+    .card.border-warning.mb-3.text-center
+      .card-header.bg-transparent.border-warning 
+        h2 PRODUCTS
+      .card-body.text-warning
+        h1.card-title 200
+        i.card-text.fas.fa-concierge-bell.fa-7x
+
+  div
+    br
+    h3 Hotels
+    table.table.table-striped
+      thead
+        tr
+          th(scope="col") #
+          th(scope="col") First
+          th(scope="col") Last
+          th(scope="col") Handle
+      tbody
+        tr
+          th(scope="row") 1
+          td Mark
+          td Otto
+          td @mdo
+        tr
+          th(scope="row") 1
+          td Mark
+          td Otto
+          td @mdo
+        tr
+          th(scope="row") 1
+          td Mark
+          td Otto
+          td @mdo

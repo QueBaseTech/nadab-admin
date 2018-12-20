@@ -10,7 +10,7 @@
   "license": "MIT",
   "scripts": {
     "postinstall": "npm rebuild node-sass",
-    "start": "node app.js",
+    "start": "nodemon app.js",
     "test": "nyc mocha --timeout=10000 --exit",
     "lint": "eslint \"**/*.js\""
   },
@@ -29,7 +29,6 @@
     "errorhandler": "^1.5.0",
     "express": "^4.16.3",
     "express-flash": "^0.0.2",
-    "express-handlebars": "^3.0.0",
     "express-session": "^1.15.6",
     "express-validator": "^5.3.0",
     "fbgraph": "^1.4.4",
@@ -57,13 +56,14 @@
     "eslint-plugin-chai-friendly": "^0.4.1",
     "eslint-plugin-import": "^2.14.0",
     "mocha": "^5.2.0",
+    "nodemon": "^1.18.9",
     "nyc": "^13.0.1",
     "sinon": "^6.3.3",
     "sinon-mongoose": "^2.2.1",
     "supertest": "^3.3.0"
   },
   "engines": {
-    "node": ">=8.11.3",
+    "node": ">=8.11.2",
     "npm": ">=5.6.0"
   }
 }
