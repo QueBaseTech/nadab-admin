@@ -1,0 +1,128 @@
+extends layout
+
+block content
+  div.border-bottom.clearfix
+    h2.float-left(style="display:inline;")=hotel.businessName
+    p.float-right
+        if hotel.paymentStatus === 'PENDING'
+            span.badge.badge-info(style="font-size:100%")=hotel.paymentStatus
+        if hotel.paymentStatus === 'UNPAID'
+            span.badge.badge-danger(style="font-size:100%")=hotel.paymentStatus
+        if hotel.paymentStatus === 'SUSPENDED'
+            span.badge.badge-warning(style="font-size:100%")=hotel.paymentStatus
+        if hotel.paymentStatus === 'PAID'
+            span.badge.badge-success(style="font-size:100%")=hotel.paymentStatus
+
+  .row.clearfix(style="margin-top:20px;")
+      .col-md-2
+          h3.border-bottom Details:
+      .col-md-10
+        .row(style="margin-top: 15px;")
+          .col-md-4
+              h6(style="display:inline;padding-right: 10px;") Email:
+              span.text-primary=hotel.businessEmail
+          .col-md-4
+              h6(style="display:inline;padding-right: 10px;") Phone NO:
+              span.text-primary=hotel.mobileNumber
+          .col-md-4
+              h6(style="display:inline;padding-right: 10px;") Location:
+              span.text-primary=hotel.city
+        .row(style="margin-top: 15px;")
+          .col-md-4
+              h6(style="display:inline;padding-right: 10px;") Owner:
+              span.text-primary=hotel.applicantName
+          .col-md-4
+              h6(style="display:inline;padding-right: 10px;") Mpesa Paybill:
+              span.text-primary=hotel.payBillNo
+
+  div(style="padding: 10px 5px; margin-top:60px;")
+    ul.nav.nav-tabs(id="myTab" role="tablist")
+      li.nav-item
+        a.nav-link.active(id="items-tab" data-toggle="tab" href="#items" role="tab" aria-controls="items" aria-selected="true")
+          i.fas.fa-list
+          | ITEMS
+      li.nav-item
+        a.nav-link(id="staff-tab" data-toggle="tab" href="#staff" role="tab" aria-controls="staff" aria-selected="false")
+          i.fas.fa-user
+          | STAFF
+      li.nav-item
+        a.nav-link(id="payments-tab" data-toggle="tab" href="#payments" role="tab" aria-controls="payments" aria-selected="false")
+          i.fas.fa-credit-card
+          | PAYMENT
+      li.nav-item
+        a.nav-link(id="manage-tab" data-toggle="tab" href="#manage" role="tab" aria-controls="manage" aria-selected="false")
+          i.fas.fa-cog
+          | MANAGE
+
+    div.tab-content(id="myTabContent")
+      div.tab-pane.fade.show.active(id="items" role="tabpanel" aria-labelledby="items-tab")
+          div(style="margin-top: 10px;")
+              if products.length === 0
+                  .card
+                    .card-body
+                        p.car-text.text-info No products
+              else
+                  h3 Products
+                  table.table.table-striped.table-hover.table-bordered
+                      thead
+                          tr
+                              th(scope="col") Name
+                              th(scope="col") Price
+                              th(scope="col") Selling status
+                              th(scope="col") #
+                      tbody
+                          each product in products
+                              tr
+                                  td= product.name
+                                  td= product.price
+                                  td= product.sellingStatus
+                                  th(scope="row")
+                                      a.btn.btn-link.btn-sm(href="/#/" + hotel._id)
+                                          i.fas.fa-trash
+      div.tab-pane.fade(id="staff" role="tabpanel" aria-labelledby="staff-tab")
+          div(style="margin-top: 10px;")
+              if staff.length === 0
+                  .card
+                      .card-body
+                          p.car-text.text-info No staff
+              else
+                  p=staff.length
+
+      div.tab-pane.fade(id="payments" role="tabpanel" aria-labelledby="payments-tab")
+          div(style="margin-top: 10px;")
+              if payments.length === 0
+                  .card
+                      .card-body
+                          p.car-text.text-info No payments
+              else
+                  p=payments.length
+
+      div.tab-pane.fade(id="manage" role="tabpanel" aria-labelledby="manage-tab")
+          div(style="margin-top: 10px;")
+            .row(style="margin-top:20px")
+              .col-md-3
+                  .pb-2.mt-2.mb-4.border-bottom
+                      h3 Suspend Account:
+              .col-md-7(style="margin-top:30px;")
+                  form(action='/hotel/'+ hotel._id +'/suspend', method='POST', onsubmit="return confirm('Are you sure you want to suspend this account?');")
+                      .form-group
+                          p You can delete your account, but keep in mind this action is irreversible.
+                          input(type='hidden', name='_csrf', value=_csrf)
+                          .col-md-7.pl-2
+                              button.btn.btn-warning(type='submit')
+                                  i.fas.fa-pause-circle.fa-sm
+                                  | Suspend account
+            .row(style="margin-top:20px")
+              .col-md-3
+                .pb-2.mt-2.mb-4.border-bottom
+                  h3 Delete Account
+
+              .col-md-7(style="margin-top:30px")
+                  form(action='/hotel/'+ hotel._id +'/delete', method='POST', onsubmit="return confirm('Are you sure you want to delete this account?');")
+                      .form-group
+                          p You can delete this account, but keep in mind this action is irreversible.
+                          input(type='hidden', name='_csrf', value=_csrf)
+                          .col-md-7.pl-2
+                              button.btn.btn-danger(type='submit')
+                                  i.fas.fa-trash-alt.fa-sm
+                                  | Delete account

@@ -35,14 +35,3 @@ exports.index = (req, res) => {
       console.log(e.message);
     });
 };
-
-/*
-* GET /hotel/:id
-* Hotel page
-*/
-exports.hotel = (req, res) => {
-  console.log(req.params.id);
-  res.render('hotel', {
-    title: 'Hotel'
-  });
-};

@@ -4,7 +4,7 @@ const { Strategy: FacebookStrategy } = require('passport-facebook');
 const { Strategy: TwitterStrategy } = require('passport-twitter');
 const { OAuth2Strategy: GoogleStrategy } = require('passport-google-oauth');
 
-const User = require('../models/User');
+const User = require('../src/models/Admin');
 
 passport.serializeUser((user, done) => {
   done(null, user.id);

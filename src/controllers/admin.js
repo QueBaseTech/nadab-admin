@@ -2,7 +2,7 @@ const { promisify } = require('util');
 const crypto = require('crypto');
 const nodemailer = require('nodemailer');
 const passport = require('passport');
-const User = require('../models/User');
+const Admin = require('../models/Admin');
 
 const randomBytesAsync = promisify(crypto.randomBytes);
 
@@ -92,14 +92,14 @@ exports.postSignup = (req, res, next) => {
     return res.redirect('/signup');
   }
 
-  const user = new User({
+  const user = new Admin({
     email: req.body.email,
     password: req.body.password
   });
 
-  User.findOne({ email: req.body.email }, (err, existingUser) => {
+  Admin.findOne({ email: req.body.email }, (err, existingAdmin) => {
     if (err) { return next(err); }
-    if (existingUser) {
+    if (existingAdmin) {
       req.flash('errors', { msg: 'Account with that email address already exists.' });
       return res.redirect('/signup');
     }
@@ -140,7 +140,7 @@ exports.postUpdateProfile = (req, res, next) => {
     return res.redirect('/account');
   }
 
-  User.findById(req.user.id, (err, user) => {
+  Admin.findById(req.user.id, (err, user) => {
     if (err) { return next(err); }
     user.email = req.body.email || '';
     user.profile.name = req.body.name || '';
@@ -176,7 +176,7 @@ exports.postUpdatePassword = (req, res, next) => {
     return res.redirect('/account');
   }
 
-  User.findById(req.user.id, (err, user) => {
+  Admin.findById(req.user.id, (err, user) => {
     if (err) { return next(err); }
     user.password = req.body.password;
     user.save((err) => {
@@ -192,7 +192,7 @@ exports.postUpdatePassword = (req, res, next) => {
  * Delete user account.
  */
 exports.postDeleteAccount = (req, res, next) => {
-  User.deleteOne({ _id: req.user.id }, (err) => {
+  Admin.deleteOne({ _id: req.user.id }, (err) => {
     if (err) { return next(err); }
     req.logout();
     req.flash('info', { msg: 'Your account has been deleted.' });
@@ -206,7 +206,7 @@ exports.postDeleteAccount = (req, res, next) => {
  */
 exports.getOauthUnlink = (req, res, next) => {
   const { provider } = req.params;
-  User.findById(req.user.id, (err, user) => {
+  Admin.findById(req.user.id, (err, user) => {
     if (err) { return next(err); }
     user[provider] = undefined;
     user.tokens = user.tokens.filter(token => token.kind !== provider);
@@ -226,7 +226,7 @@ exports.getReset = (req, res, next) => {
   if (req.isAuthenticated()) {
     return res.redirect('/');
   }
-  User
+  Admin
     .findOne({ passwordResetToken: req.params.token })
     .where('passwordResetExpires').gt(Date.now())
     .exec((err, user) => {
@@ -257,7 +257,7 @@ exports.postReset = (req, res, next) => {
   }
 
   const resetPassword = () =>
-    User
+    Admin
       .findOne({ passwordResetToken: req.params.token })
       .where('passwordResetExpires').gt(Date.now())
       .then((user) => {
@@ -357,7 +357,7 @@ exports.postForgot = (req, res, next) => {
     .then(buf => buf.toString('hex'));
 
   const setRandomToken = token =>
-    User
+    Admin
       .findOne({ email: req.body.email })
       .then((user) => {
         if (!user) {
