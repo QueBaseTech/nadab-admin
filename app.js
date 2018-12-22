@@ -112,6 +112,14 @@ app.use((req, res, next) => {
     && (req.path === '/account' || req.path.match(/^\/api/))) {
     req.session.returnTo = req.originalUrl;
   }
+  // Auth or secrete routes
+  if (req.path !== '/login' && req.path !== '/signup' && req.path !== '/forgot') {
+    if (!req.user) {
+      req.flash('error', { message: 'You have to login first.' })
+      res.redirect('/login');
+    }
+  }
+
   next();
 });
 app.use('/', express.static(path.join(__dirname, 'public'), { maxAge: 31557600000 }));
@@ -124,7 +132,12 @@ app.use('/webfonts', express.static(path.join(__dirname, 'node_modules/@fortawes
  * Primary app routes.
  */
 app.get('/', homeController.index);
+
 app.get('/hotels/:id', hotelController.hotel);
+app.post('/hotels/:id/delete', hotelController.delete);
+app.post('/hotels/:id/suspend', hotelController.suspend);
+
+
 app.get('/login', adminController.getLogin);
 app.post('/login', adminController.postLogin);
 app.get('/logout', adminController.logout);

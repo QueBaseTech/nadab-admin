@@ -86,7 +86,32 @@ block content
                       .card-body
                           p.car-text.text-info No staff
               else
-                  p=staff.length
+                  h3 Staff
+                  table.table.table-striped.table-hover.table-bordered
+                      thead
+                          tr
+                              th(scope="col") Name
+                              th(scope="col") Username
+                              th(scope="col") Role(s)
+                              th(scope="col") A/C status
+                              th(scope="col") #
+                      tbody
+                          each employee in staff
+                              tr
+                                  td= employee.fullName
+                                  td= employee.shortName
+                                  td
+                                    each perm in employee.permissions
+                                        p
+                                            code= perm
+                                  td
+                                    if employee.isActive
+                                        p.badge.badge-info ACTIVE
+                                    else
+                                        p.badge.btn-warning IN-ACTIVE
+                                  th(scope="row")
+                                      a.btn.btn-link.btn-sm(href="/#/" + hotel._id)
+                                          i.fas.fa-trash
 
       div.tab-pane.fade(id="payments" role="tabpanel" aria-labelledby="payments-tab")
           div(style="margin-top: 10px;")
@@ -104,9 +129,9 @@ block content
                   .pb-2.mt-2.mb-4.border-bottom
                       h3 Suspend Account:
               .col-md-7(style="margin-top:30px;")
-                  form(action='/hotel/'+ hotel._id +'/suspend', method='POST', onsubmit="return confirm('Are you sure you want to suspend this account?');")
+                  form(action='/hotels/'+ hotel._id +'/suspend', method='POST', onsubmit="return confirm('Are you sure you want to suspend this account?');")
                       .form-group
-                          p You can delete your account, but keep in mind this action is irreversible.
+                          p Suspending the hotel will make sure the hotel is not visible on the app.
                           input(type='hidden', name='_csrf', value=_csrf)
                           .col-md-7.pl-2
                               button.btn.btn-warning(type='submit')
@@ -115,14 +140,15 @@ block content
             .row(style="margin-top:20px")
               .col-md-3
                 .pb-2.mt-2.mb-4.border-bottom
-                  h3 Delete Account
+                  h3 Delete Hotel
 
               .col-md-7(style="margin-top:30px")
-                  form(action='/hotel/'+ hotel._id +'/delete', method='POST', onsubmit="return confirm('Are you sure you want to delete this account?');")
+                  form(action='/hotels/'+ hotel._id +'/delete', method='POST', onsubmit="return confirm('Are you sure you want to delete this hotel?');")
                       .form-group
-                          p You can delete this account, but keep in mind this action is irreversible.
+                          p You can delete this hotel, but keep in mind this
+                              b action is irreversible.
                           input(type='hidden', name='_csrf', value=_csrf)
                           .col-md-7.pl-2
                               button.btn.btn-danger(type='submit')
                                   i.fas.fa-trash-alt.fa-sm
-                                  | Delete account
+                                  | Delete hotel

@@ -44,3 +44,25 @@ exports.hotel = (req, res) => {
       });
     });
 };
+
+
+exports.delete = (req, res) => {
+  Hotel.findOneAndDelete(req.params.id)
+    .then(hotel => {
+      req.flash('success', { msg: 'Success! Hotel deleted.' });
+      res.redirect('/');
+    })
+    .catch(e => {
+      console.log(e.message);
+    });
+}
+
+exports.suspend = (req, res) => {
+  Hotel.findOneAndUpdate(req.params.id, { paymentStatus: 'SUSPENDED' }, { new: true })
+    .then(hotel => {
+      res.redirect(`/hotels/${hotel._id}`);
+    })
+    .catch(e => {
+      console.log(e.message);
+    });
+}
