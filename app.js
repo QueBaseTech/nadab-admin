@@ -90,7 +90,8 @@ app.use((req, res, next) => {
   if (req.path === '/api/upload') {
     next();
   } else {
-    lusca.csrf()(req, res, next);
+    // lusca.csrf()(req, res, next);
+    next();
   }
 });
 app.use(lusca.xframe('SAMEORIGIN'));
@@ -113,7 +114,7 @@ app.use((req, res, next) => {
     req.session.returnTo = req.originalUrl;
   }
   // Auth or secrete routes
-  if (req.path !== '/login' && req.path !== '/signup' && req.path !== '/forgot') {
+  if (req.path !== '/login' && req.path !== '/signup' && req.path !== '/forgot' && req.path !== '/api/login') {
     if (!req.user) {
       req.flash('error', { message: 'You have to login first.' })
       res.redirect('/login');

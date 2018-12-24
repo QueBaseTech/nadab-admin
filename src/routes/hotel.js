@@ -90,5 +90,4 @@ module.exports = (app) => {
 };
 
 
-
 // exports.hotel =

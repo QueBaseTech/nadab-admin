@@ -1,26 +1,25 @@
 const router = require('express').Router();
-const User = require('../models/Admin');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const User = require('../models/Admin');
 
 let token = {};
 
 function getToken(req, res, next) {
-  if (req.headers['x-token'] || req.query['token']) {
-    let tok = "";
+  if (req.headers['x-token'] || req.query.token) {
+    let tok = '';
     if (req.headers['x-token'] !== undefined) tok = req.headers['x-token'];
-    if (req.query['token'] !== undefined) tok = req.query['token'];
-    jwt.verify(tok, process.env.SESSIONKEY, function(error, decode) {
+    if (req.query.token !== undefined) tok = req.query.token;
+    jwt.verify(tok, process.env.SESSIONKEY, (error, decode) => {
       if (error) {
-        return res.status(403).json({ success: false, message: "We cannot very your profile" + error.message });
-      } else {
-        token = decode;
+        return res.status(404).json({ success: false, message: `We cannot verify your profile ${error.message}` });
       }
+      token = decode;
     });
   }
 
   if (token.id === undefined) {
-    return res.status(403).json({ success: false, message: "You are not authorized" });
+    return res.status(404).json({ success: false, message: 'You are not authorized' });
   }
   next();
 }
@@ -43,19 +42,19 @@ router.get('/:id', getToken, (req, res) => {
 });
 
 router.post('/add', getToken, (req, res) => {
-    if (Object.keys(req.body).length === 0) {
-        res.status(404).json({ success: false, message: 'A request body is required' });
-    }
-    let user = new User(req.body);
-    bcrypt.hash(user.password, 10).then((hash) => {
-      user.password = hash;
-      user.hotel = token.id;
-      return user.save();
-    }).then((user) => {
-      res.json({ success: true, user });
-    }).catch((e) => {
-      res.status(404).json({ success: false, message: e.message });
-    });
+  if (Object.keys(req.body).length === 0) {
+    res.status(404).json({ success: false, message: 'A request body is required' });
+  }
+  const user = new User(req.body);
+  bcrypt.hash(user.password, 10).then((hash) => {
+    user.password = hash;
+    user.hotel = token.id;
+    return user.save();
+  }).then((user) => {
+    res.json({ success: true, user });
+  }).catch((e) => {
+    res.status(404).json({ success: false, message: e.message });
+  });
 });
 
 router.put('/activate/:id', getToken, (req, res) => {
@@ -72,7 +71,7 @@ router.put('/activate/:id', getToken, (req, res) => {
 
 router.put('/edit/:id', getToken, (req, res) => {
   if (Object.keys(req.body).length === 0) {
-      res.status(404).json({ success: false, message: 'A request body is required' });
+    res.status(404).json({ success: false, message: 'A request body is required' });
   }
   User.findByIdAndUpdate(req.params.id, req.body, { new: true }).then((user) => {
     res.json({ success: true, user });
@@ -92,4 +91,4 @@ router.delete('/delete/:id', getToken, (req, res) => {
 
 module.exports = (app) => {
   app.use('/admin/users', router);
-}
+};
