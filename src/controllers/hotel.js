@@ -69,49 +69,23 @@ exports.hotel = (req, res) => {
 };
 
 
-exports.delete = async (req, res) => {
-  const hotel = await Hotel.findByIdAndDelete(req.params.id);
-  if (hotel) {
-    req.flash('success', { msg: 'Success! Hotel deleted.' });
-    res.redirect('/');
-  }
-};
-
-exports.suspend = (req, res) => {
-  const { id } = req.params;
-  Hotel.findByIdAndUpdate(id, { paymentStatus: 'SUSPENDED' }, { new: true })
-    .then((hotel) => {
-      res.redirect(`/hotels/${id}`);
+exports.delete = (req, res) => {
+  Hotel.findOneAndDelete(req.params.id)
+    .then(hotel => {
+      req.flash('success', { msg: 'Success! Hotel deleted.' });
+      res.redirect('/');
     })
-    .catch((e) => {
+    .catch(e => {
       console.log(e.message);
     });
-};
+}
 
-exports.add = async (req, res) => {
-  if (req.method === 'GET') {
-    res.render('hotel/add', { title: 'Add Hotel', hotel: new Hotel() });
-  }
-
-  if (req.method === 'POST') {
-    if (req.body === undefined) {
-      throw new Error('A request body is required');
-    }
-    const hotel = new Hotel(req.body);
-    const salt = await bcrypt.genSalt(10);
-    const hash = await bcrypt.hash(hotel.password, salt);
-    hotel.password = hash;
-    hotel.save()
-      .then((h) => {
-        req.flash('success', { msg: 'Hotel added successfuly.' });
-        res.redirect(`/hotels/${h._id}`);
-        // TODO:: Send verification email ~ via a message broker
-      })
-      .catch((e) => {
-        e.message.toString().split(',').forEach((e) => {
-          req.flash('errors', { msg: e });
-        });
-        res.render('hotel/add', { title: 'Add Hotel', hotel });
-      });
-  }
-};
+exports.suspend = (req, res) => {
+  Hotel.findOneAndUpdate(req.params.id, { paymentStatus: 'SUSPENDED' }, { new: true })
+    .then(hotel => {
+      res.redirect(`/hotels/${hotel._id}`);
+    })
+    .catch(e => {
+      console.log(e.message);
+    });
+}
