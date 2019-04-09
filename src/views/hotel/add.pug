@@ -1,0 +1,67 @@
+extends ../layout
+
+block content
+    .pb-2.mt-2.mb-4.border-bottom
+        h3 Add Hotel
+
+    form(action='/hotels/add', method='POST')
+        input(type='hidden', name='_csrf', value=_csrf)
+        .form-group.row
+            label.col-md-3.col-form-label.font-weight-bold.text-right(for='applicantName') Applicant Name
+            .col-md-7
+                input.form-control(type='text', value=hotel.applicantName name='applicantName', id='applicantName')
+        .form-group.row
+            label.col-md-3.col-form-label.font-weight-bold.text-right(for='businessName') Business Name
+            .col-md-7
+                input.form-control(type='text', value=hotel.businessName name='businessName', id='businessName')
+        .form-group.row
+            label.col-md-3.col-form-label.font-weight-bold.text-right(for='businessEmail') Business Email
+            .col-md-7
+                input.form-control(type='email', value=hotel.businessEmail name='businessEmail', id='businessEmail')
+        .form-group.row
+            label.col-md-3.col-form-label.font-weight-bold.text-right(for='mobileNumber') Mobile Number
+            .col-md-7
+                input.form-control(type='text', value=hotel.mobileNumber name='mobileNumber', id='mobileNumber')
+        .form-group.row
+            label.col-md-3.col-form-label.font-weight-bold.text-right(for='paybillNo') Paybill No.
+            .col-md-7
+                input.form-control(type='text', value=hotel.payBillNo name='payBillNo', id='paybillNo')
+        .form-group.row
+            label.col-md-3.col-form-label.font-weight-bold.text-right(for='city') City
+            .col-md-7
+                input.form-control(type='text', value=hotel.city name='city', id='city')
+        .form-group.row
+            label.col-md-3.col-form-label.font-weight-bold.text-right(for='address') Address
+            .col-md-7
+                input.form-control(type='text', value=hotel.address name='address', id='address')
+
+        .form-group.row
+            label.col-md-3.col-form-label.font-weight-bold.text-right Payment status
+            .col-sm-6
+                label.radio.col-sm-3
+                    input(type='radio', name='paymentStatus', checked=hotel.paymentStatus==='UNPAID' value='UNPAID', data-toggle='radio')
+                    span UNPAID
+                label.radio.col-sm-3
+                    input(type='radio', name='paymentStatus', checked=hotel.paymentStatus==='PAID' value='PAID', data-toggle='radio')
+                    span PAID
+                label.radio.col-sm-3
+                    input(type='radio', name='paymentStatus', checked=hotel.paymentStatus==='WAITING' value='WAITING', data-toggle='radio')
+                    span WAITING
+        .form-group.row
+            label.col-md-3.col-form-label.font-weight-bold.text-right(for='location') Location
+            .col-md-7
+                input.form-control(type='text', name='location', id='location', value=hotel.location, autocomplete)
+        .form-group.row
+            label.col-md-3.col-form-label.font-weight-bold.text-right(for='website') Website
+            .col-md-7
+                input.form-control(type='text', name='website', id='website', value=hotel.website, autocomplete='url')
+        .form-group
+            .offset-sm-3.col-md-7.pl-2
+                button.btn.btn.btn-primary(type='submit')
+                    i.fas.fa-plus.fa-sm
+                    | ADD
+        .form-group
+            .offset-sm-3.col-md-7.pl-2
+                input(type='hidden', name='password', value='Nadab001')
+                h5 All new accounts have a default password as
+                    code  Nadab001

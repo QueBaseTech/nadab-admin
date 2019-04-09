@@ -1,0 +1,70 @@
+extends layout
+
+block content
+  script(src="/js/plotly-latest.min.js")
+  .card-deck.border-bottom
+    .card.border-info.mb-3.text-center
+      .card-header.bg-transparent.border-info
+        h2 HOTELS
+      .card-body.text-info
+        h1.card-title= totalHotels
+        i.card-text.fas.fa-hotel.fa-7x
+
+    .card.border-success.mb-3.text-center
+      .card-header.bg-transparent.border-success
+        h2 ORDERS
+      .card-body.text-success
+        h1.card-title= totalOrders
+        i.card-text.fas.fa-truck.fa-7x
+
+    .card.border-warning.mb-3.text-center
+      .card-header.bg-transparent.border-warning
+        h2 PRODUCTS
+      .card-body.text-warning
+        h1.card-title= totalItems
+        i.card-text.fas.fa-concierge-bell.fa-7x
+
+  //div
+  //    h3 Stats
+  //    - var trace1 = { x: [1, 2, 3, 4], y: [10, 15, 13, 17], type: 'scatter' };
+  //    - var trace2 = { x: [1, 2, 3, 4], y: [16, 5, 11, 9], type: 'scatter' };
+  //    - var data = [trace1, trace2];
+  //    .row
+  //    div#myDiv.col-6
+  //    script.
+  //      var trace1 = {x: [1, 2, 3, 4], y: [10, 15, 13, 17], type: 'scatter'};
+  //      var trace2 = {x: [1, 2, 3, 4], y: [16, 5, 11, 9], type: 'scatter'};
+  //      var data = [trace1, trace2];
+  //      console.log(data)
+  //      Plotly.newPlot('myDiv', data);
+
+
+  div
+    br
+    h3 Hotels
+    table.table.table-striped.table-hover.table-bordered
+      thead
+        tr
+          th(scope="col") Business name
+          th(scope="col") Owner
+          th(scope="col") Email
+          th(scope="col") Status
+          th(scope="col") #
+      tbody
+        each hotel in hotels
+            tr
+                td= hotel.businessName
+                td= hotel.applicantName
+                td= hotel.businessEmail
+                td
+                    if hotel.paymentStatus === 'PENDING'
+                        span.badge.badge-info(style="font-size:100%")=hotel.paymentStatus
+                    if hotel.paymentStatus === 'UNPAID'
+                        span.badge.badge-danger(style="font-size:100%")=hotel.paymentStatus
+                    if hotel.paymentStatus === 'SUSPENDED'
+                        span.badge.badge-warning(style="font-size:100%")=hotel.paymentStatus
+                    if hotel.paymentStatus === 'PAID'
+                        span.badge.badge-success(style="font-size:100%")=hotel.paymentStatus
+                th(scope="row")
+                    a.btn.btn-link.btn-sm(href="/hotels/" + hotel._id)
+                        i.fas.fa-pencil-alt
