@@ -208,14 +208,24 @@ block content
                   .pb-2.mt-2.mb-4.border-bottom
                       h3 Suspend Account:
               .col-md-7(style="margin-top:30px;")
-                  form(action='/hotels/'+ hotel._id +'/suspend', method='POST', onsubmit="return confirm('Are you sure you want to suspend this account?');")
-                      .form-group
-                          p Suspending the hotel will make sure the hotel is not visible on the app.
-                          input(type='hidden', name='_csrf', value=_csrf)
-                          .col-md-7.pl-2
-                              button.btn.btn-warning(type='submit')
-                                  i.fas.fa-pause-circle.fa-sm
-                                  | Suspend account
+                  if hotel.paymentStatus !== 'SUSPENDED'
+                      form(action='/hotels/' + hotel._id + '/suspend', method='POST', onsubmit="return confirm('Are you sure you want to suspend this account?');")
+                          .form-group
+                              p Suspending the hotel will make sure the hotel is not visible on the app.
+                              input(type='hidden', name='_csrf', value=_csrf)
+                              .col-md-7.pl-2
+                                  button.btn.btn-warning(type='submit')
+                                      i.fas.fa-pause-circle.fa-sm
+                                      | Suspend account
+                  else
+                      form(action='/hotels/' + hotel._id + '/activate', method='POST', onsubmit="return confirm('Are you sure you want to activate this account?');")
+                          .form-group
+                              p Activating the hotel will make sure the hotel is visible on the app.
+                              input(type='hidden', name='_csrf', value=_csrf)
+                              .col-md-7.pl-2
+                                  button.btn.btn-warning(type='submit')
+                                      i.fas.fa-pause-circle.fa-sm
+                                      | Activate account
             .row(style="margin-top:20px")
               .col-md-3
                 .pb-2.mt-2.mb-4.border-bottom

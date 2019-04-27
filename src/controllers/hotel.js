@@ -88,6 +88,17 @@ exports.suspend = (req, res) => {
     });
 };
 
+exports.activate = (req, res) => {
+	const { id } = req.params;
+	Hotel.findByIdAndUpdate(id, { paymentStatus: 'PAID' }, { new: true })
+		.then((hotel) => {
+			res.redirect(`/hotels/${id}`);
+		})
+		.catch((e) => {
+			console.log(e.message);
+		});
+};
+
 exports.add = async (req, res) => {
   if (req.method === 'GET') {
     res.render('hotel/add', { title: 'Add Hotel', hotel: new Hotel() });

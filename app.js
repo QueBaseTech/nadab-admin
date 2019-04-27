@@ -143,6 +143,7 @@ app.post('/hotels/add', hotelController.add);
 app.get('/hotels/:id', hotelController.hotel);
 app.post('/hotels/:id/delete', hotelController.delete);
 app.post('/hotels/:id/suspend', hotelController.suspend);
+app.post('/hotels/:id/activate', hotelController.activate);
 app.post('/payments/pay/:hotelId', paymentController.pay);
 
 
