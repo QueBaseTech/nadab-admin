@@ -28,15 +28,23 @@ block content
   //    h3 Stats
   //    - var trace1 = { x: [1, 2, 3, 4], y: [10, 15, 13, 17], type: 'scatter' };
   //    - var trace2 = { x: [1, 2, 3, 4], y: [16, 5, 11, 9], type: 'scatter' };
-  //    - var data = [trace1, trace2];
+  //    - console.log(plotData)
+  //    - var data = plotData;
   //    .row
-  //    div#myDiv.col-6
-  //    script.
-  //      var trace1 = {x: [1, 2, 3, 4], y: [10, 15, 13, 17], type: 'scatter'};
-  //      var trace2 = {x: [1, 2, 3, 4], y: [16, 5, 11, 9], type: 'scatter'};
-  //      var data = [trace1, trace2];
-  //      console.log(data)
-  //      Plotly.newPlot('myDiv', data);
+  //        div#myDiv.col-12
+  //        div#test.col-12
+  //        script.
+  //          var trace1 = {x: [1, 2, 3, 4], y: [10, 15, 13, 17], type: 'scatter'};
+  //          var trace2 = {x: [1, 2, 3, 4], y: [16, 5, 11, 9], type: 'scatter'};
+  //          var data = [trace1, trace2];
+  //          Plotly.newPlot('myDiv', data);
+  //          fetch("http://localhost:8080/plots").then( response => response.json() ).then( data => {
+  //              console.log(data.fees)
+  //          console.log(data.orders)
+  //              Plotly.newPlot('myDiv', data.fees);
+  //          }).catch(e => {
+  //              console.log(e);
+  //          });
 
 
   div

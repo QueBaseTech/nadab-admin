@@ -1,6 +1,7 @@
 const axios = require('axios');
 
 const { Order } = require('../models/Orders');
+const Fee = require('../models/Fee');
 
 const API_BASE = process.env.API_BASE_URL;
 
@@ -37,3 +38,25 @@ exports.index = (req, res) => {
       console.log(e.message);
     });
 };
+
+exports.plots = (req, res) => {
+  Fee.find()
+    .then((fees) => {
+	    let x = [];
+	    let y = [];
+	    let z = [];
+	    fees.forEach((fee) => {
+		    x.push(fee.day);
+		    y.push(fee.total);
+		    z.push(fee.numberOfOrders);
+	    });
+	    let data = [
+		    { x, y, type: 'line', title: 'Fees' },
+		    // { x, z, type: 'line', title: 'Orders' }
+      ];
+	    // TODO:: Add orders as their own plots
+	    res.json({ fees:[{ x, y, type: 'line', title: 'Fees' }], orders: [{ x, z, type: 'line', title: 'Orders' }] });
+    }).catch(e=> {
+      console.log(e.message);
+  })
+}

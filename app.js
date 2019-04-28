@@ -145,6 +145,7 @@ app.post('/hotels/:id/delete', hotelController.delete);
 app.post('/hotels/:id/suspend', hotelController.suspend);
 app.post('/hotels/:id/activate', hotelController.activate);
 app.post('/payments/pay/:hotelId', paymentController.pay);
+app.get('/plots', homeController.plots);
 
 
 app.get('/login', adminController.getLogin);

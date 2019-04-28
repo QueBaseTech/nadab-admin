@@ -95,11 +95,11 @@ block content
                                     a.btn.btn-link.btn-sm(href="/#/" + hotel._id)
                                         i.fas.fa-trash
                         - nadabFee = (totalFees * 0.0099).toFixed(2)
-                        tr
+                        tr.bg-dark.text-white
                             td(colspan="4" style="text-align:right; font-weight:bold;font-size:20px;") Total Orders::
                             td(colspan="1" style="text-align:center;font-size:20px;") KSHs.
                                 = totalFees
-                        tr
+                        tr.bg-transparent.text-success
                             td(colspan="4" style="text-align:right; font-weight:bold;font-size:20px;") Total Fee::
                             td(colspan="1" style="text-align:center;font-size:20px;") KSHs.
                                 = nadabFee
@@ -181,12 +181,11 @@ block content
                               th(scope="col") Note
                               th(scope="col") #
                       tbody
-                          - var balance = totalFees;
+                          - var balance = nadabFee;
                           each payment in payments
                               - balance -= payment.total;
                               - var date =  new Date(payment.createdAt);
-                              - console.log(date);
-                              - var day = `${date.getDay()}/${date.getMonth()}/${date.getFullYear()}`
+                              - var day = `${date.getDate()}/${date.getMonth()+1}/${date.getFullYear()}`
                               tr
                                   td= day
                                   td= payment.total

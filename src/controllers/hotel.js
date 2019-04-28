@@ -26,6 +26,7 @@ exports.hotel = (req, res) => {
     payments: []
   };
   Hotel.findById(id)
+    .sort({ 'createdAt': -1 })
     .then((hotel) => {
       if (hotel) {
         // TODO:: +254
@@ -41,11 +42,11 @@ exports.hotel = (req, res) => {
     })
     .then((staff) => {
       data.staff = staff;
-      return Payment.find({ hotel: data.hotel._id }).sort('asc');
+      return Payment.find({ hotel: data.hotel._id }).sort({ 'createdAt': -1 });
     })
     .then((payments) => {
       data.payments = payments;
-      return Fee.find({ hotel: data.hotel._id }).sort('asc');
+      return Fee.find({ hotel: data.hotel._id }).sort({ 'createdAt': -1 });
     })
     .then((fees) => {
       const payment = new Payment();
