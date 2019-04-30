@@ -55,7 +55,7 @@ exports.plots = (req, res) => {
 		    // { x, z, type: 'line', title: 'Orders' }
       ];
 	    // TODO:: Add orders as their own plots
-	    res.json({ fees:[{ x, y, type: 'line', title: 'Fees' }], orders: [{ x, z, type: 'line', title: 'Orders' }] });
+	    res.json({ fees:[{ x, y, mode: 'lines', name: 'Fees' }], orders: [{ x, y:z, mode: 'lines', name: 'Orders' }] });
     }).catch(e=> {
       console.log(e.message);
   })
