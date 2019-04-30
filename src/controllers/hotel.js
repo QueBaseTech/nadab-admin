@@ -33,8 +33,9 @@ exports.hotel = (req, res) => {
         hotel.mobileNumber = hotel.mobileNumber.toString()[0] === '7' ? `+254${hotel.mobileNumber.toString()}` : hotel.mobileNumber;
         data.hotel = hotel;
         return Product.find({ hotel: hotel._id });
+      } else {
+        return res.json({ error: 'Hotel not found' });
       }
-      return res.json({ error: 'Hotel not found' });
     })
     .then((products) => {
       data.products = products;
