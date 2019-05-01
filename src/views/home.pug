@@ -62,6 +62,8 @@ block content
                         span.badge.badge-warning(style="font-size:100%")=hotel.paymentStatus
                     if hotel.paymentStatus === 'PAID'
                         span.badge.badge-success(style="font-size:100%")=hotel.paymentStatus
+                    if hotel.paymentStatus === 'NEW'
+                        span.badge.badge-primary(style="font-size:100%")=hotel.paymentStatus
                 th(scope="row")
                     a.btn.btn-link.btn-sm(href="/hotels/" + hotel._id)
                         i.fas.fa-pencil-alt
