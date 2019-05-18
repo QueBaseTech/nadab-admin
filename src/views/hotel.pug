@@ -15,7 +15,7 @@ block content
 
   .row.clearfix(style="margin-top:20px;")
       .col-md-4
-          img(src="http://35.237.145.76:5000/images/uploads/hotels/thumb_"+hotel.image, style="width:100%;" alt=hotel.businessName)
+          img(src="http://35.237.145.76:5000/images/uploads/hotels/thumb_"+hotel.image, style="height:300px;" alt=hotel.businessName)
       .col-md-8
         h3.border-bottom Details:
         .row(style="margin-top: 15px;")
@@ -95,14 +95,15 @@ block content
                                     a.btn.btn-link.btn-sm(href="/#/" + hotel._id)
                                         i.fas.fa-trash
                         - nadabFee = totalFees !== 0.00? (totalFees * 0.0099).toFixed(2): 0.00;
+                        - totalFees = totalFees.toFixed(2);
                         tr.bg-dark.text-white
-                            td(colspan="4" style="text-align:right; font-weight:bold;font-size:20px;") Total Orders::
+                            td(colspan="4" style="text-align:right; font-weight:bold;font-size:20px;") Total Fees::
                             td(colspan="1" style="text-align:center;font-size:20px;") KSHs.
                                 = totalFees
-                        tr.bg-transparent.text-success
-                            td(colspan="4" style="text-align:right; font-weight:bold;font-size:20px;") Total Fee::
-                            td(colspan="1" style="text-align:center;font-size:20px;") KSHs.
-                                = nadabFee
+                        //- tr.bg-transparent.text-success
+                        //-     td(colspan="4" style="text-align:right; font-weight:bold;font-size:20px;") Total Fee::
+                        //-     td(colspan="1" style="text-align:center;font-size:20px;") KSHs.
+                        //-         = totalFee
 
       div.tab-pane.fade(id="items" role="tabpanel" aria-labelledby="items-tab")
         div(style="margin-top: 10px;")
