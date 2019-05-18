@@ -24,9 +24,12 @@ exports.getLogin = (req, res) => {
  * Sign in using email and password.
  */
 exports.postLogin = (req, res, next) => {
-  req.assert('email', 'Email is not valid').isEmail();
-  req.assert('password', 'Password cannot be blank').notEmpty();
-  req.sanitize('email').normalizeEmail({ gmail_remove_dots: false });
+  req.assert('email', 'Email is not valid')
+    .isEmail();
+  req.assert('password', 'Password cannot be blank')
+    .notEmpty();
+  req.sanitize('email')
+    .normalizeEmail({ gmail_remove_dots: false });
 
   const errors = req.validationErrors();
 
@@ -36,13 +39,17 @@ exports.postLogin = (req, res, next) => {
   }
 
   passport.authenticate('local', (err, user, info) => {
-    if (err) { return next(err); }
+    if (err) {
+      return next(err);
+    }
     if (!user) {
       req.flash('errors', info);
       return res.redirect('/login');
     }
     req.logIn(user, (err) => {
-      if (err) { return next(err); }
+      if (err) {
+        return next(err);
+      }
       req.flash('success', { msg: 'Success! You are logged in.' });
       res.redirect(req.session.returnTo || '/');
     });
@@ -80,10 +87,14 @@ exports.getSignup = (req, res) => {
  * Create a new local account.
  */
 exports.postSignup = (req, res, next) => {
-  req.assert('email', 'Email is not valid').isEmail();
-  req.assert('password', 'Password must be at least 4 characters long').len(4);
-  req.assert('confirmPassword', 'Passwords do not match').equals(req.body.password);
-  req.sanitize('email').normalizeEmail({ gmail_remove_dots: false });
+  req.assert('email', 'Email is not valid')
+    .isEmail();
+  req.assert('password', 'Password must be at least 4 characters long')
+    .len(4);
+  req.assert('confirmPassword', 'Passwords do not match')
+    .equals(req.body.password);
+  req.sanitize('email')
+    .normalizeEmail({ gmail_remove_dots: false });
 
   const errors = req.validationErrors();
 
@@ -98,13 +109,17 @@ exports.postSignup = (req, res, next) => {
   });
 
   Admin.findOne({ email: req.body.email }, (err, existingAdmin) => {
-    if (err) { return next(err); }
+    if (err) {
+      return next(err);
+    }
     if (existingAdmin) {
       req.flash('errors', { msg: 'Account with that email address already exists.' });
       return res.redirect('/signup');
     }
     user.save((err) => {
-      if (err) { return next(err); }
+      if (err) {
+        return next(err);
+      }
       req.logIn(user, (err) => {
         if (err) {
           return next(err);
@@ -130,8 +145,10 @@ exports.getAccount = (req, res) => {
  * Update profile information.
  */
 exports.postUpdateProfile = (req, res, next) => {
-  req.assert('email', 'Please enter a valid email address.').isEmail();
-  req.sanitize('email').normalizeEmail({ gmail_remove_dots: false });
+  req.assert('email', 'Please enter a valid email address.')
+    .isEmail();
+  req.sanitize('email')
+    .normalizeEmail({ gmail_remove_dots: false });
 
   const errors = req.validationErrors();
 
@@ -141,7 +158,9 @@ exports.postUpdateProfile = (req, res, next) => {
   }
 
   Admin.findById(req.user.id, (err, user) => {
-    if (err) { return next(err); }
+    if (err) {
+      return next(err);
+    }
     user.email = req.body.email || '';
     user.profile.name = req.body.name || '';
     user.profile.gender = req.body.gender || '';
@@ -166,8 +185,10 @@ exports.postUpdateProfile = (req, res, next) => {
  * Update current password.
  */
 exports.postUpdatePassword = (req, res, next) => {
-  req.assert('password', 'Password must be at least 4 characters long').len(4);
-  req.assert('confirmPassword', 'Passwords do not match').equals(req.body.password);
+  req.assert('password', 'Password must be at least 4 characters long')
+    .len(4);
+  req.assert('confirmPassword', 'Passwords do not match')
+    .equals(req.body.password);
 
   const errors = req.validationErrors();
 
@@ -177,10 +198,14 @@ exports.postUpdatePassword = (req, res, next) => {
   }
 
   Admin.findById(req.user.id, (err, user) => {
-    if (err) { return next(err); }
+    if (err) {
+      return next(err);
+    }
     user.password = req.body.password;
     user.save((err) => {
-      if (err) { return next(err); }
+      if (err) {
+        return next(err);
+      }
       req.flash('success', { msg: 'Password has been changed.' });
       res.redirect('/account');
     });
@@ -193,7 +218,9 @@ exports.postUpdatePassword = (req, res, next) => {
  */
 exports.postDeleteAccount = (req, res, next) => {
   Admin.deleteOne({ _id: req.user.id }, (err) => {
-    if (err) { return next(err); }
+    if (err) {
+      return next(err);
+    }
     req.logout();
     req.flash('info', { msg: 'Your account has been deleted.' });
     res.redirect('/');
@@ -207,11 +234,15 @@ exports.postDeleteAccount = (req, res, next) => {
 exports.getOauthUnlink = (req, res, next) => {
   const { provider } = req.params;
   Admin.findById(req.user.id, (err, user) => {
-    if (err) { return next(err); }
+    if (err) {
+      return next(err);
+    }
     user[provider] = undefined;
     user.tokens = user.tokens.filter(token => token.kind !== provider);
     user.save((err) => {
-      if (err) { return next(err); }
+      if (err) {
+        return next(err);
+      }
       req.flash('info', { msg: `${provider} account has been unlinked.` });
       res.redirect('/account');
     });
@@ -228,9 +259,12 @@ exports.getReset = (req, res, next) => {
   }
   Admin
     .findOne({ passwordResetToken: req.params.token })
-    .where('passwordResetExpires').gt(Date.now())
+    .where('passwordResetExpires')
+    .gt(Date.now())
     .exec((err, user) => {
-      if (err) { return next(err); }
+      if (err) {
+        return next(err);
+      }
       if (!user) {
         req.flash('errors', { msg: 'Password reset token is invalid or has expired.' });
         return res.redirect('/forgot');
@@ -246,8 +280,10 @@ exports.getReset = (req, res, next) => {
  * Process the reset password request.
  */
 exports.postReset = (req, res, next) => {
-  req.assert('password', 'Password must be at least 4 characters long.').len(4);
-  req.assert('confirm', 'Passwords must match.').equals(req.body.password);
+  req.assert('password', 'Password must be at least 4 characters long.')
+    .len(4);
+  req.assert('confirm', 'Passwords must match.')
+    .equals(req.body.password);
 
   const errors = req.validationErrors();
 
@@ -259,7 +295,8 @@ exports.postReset = (req, res, next) => {
   const resetPassword = () =>
     Admin
       .findOne({ passwordResetToken: req.params.token })
-      .where('passwordResetExpires').gt(Date.now())
+      .where('passwordResetExpires')
+      .gt(Date.now())
       .then((user) => {
         if (!user) {
           req.flash('errors', { msg: 'Password reset token is invalid or has expired.' });
@@ -268,16 +305,21 @@ exports.postReset = (req, res, next) => {
         user.password = req.body.password;
         user.passwordResetToken = undefined;
         user.passwordResetExpires = undefined;
-        return user.save().then(() => new Promise((resolve, reject) => {
-          req.logIn(user, (err) => {
-            if (err) { return reject(err); }
-            resolve(user);
-          });
-        }));
+        return user.save()
+          .then(() => new Promise((resolve, reject) => {
+            req.logIn(user, (err) => {
+              if (err) {
+                return reject(err);
+              }
+              resolve(user);
+            });
+          }));
       });
 
   const sendResetPasswordEmail = (user) => {
-    if (!user) { return; }
+    if (!user) {
+      return;
+    }
     let transporter = nodemailer.createTransport({
       service: 'SendGrid',
       auth: {
@@ -321,7 +363,9 @@ exports.postReset = (req, res, next) => {
 
   resetPassword()
     .then(sendResetPasswordEmail)
-    .then(() => { if (!res.finished) res.redirect('/'); })
+    .then(() => {
+      if (!res.finished) res.redirect('/');
+    })
     .catch(err => next(err));
 };
 
@@ -343,8 +387,10 @@ exports.getForgot = (req, res) => {
  * Create a random token, then the send user an email with a reset link.
  */
 exports.postForgot = (req, res, next) => {
-  req.assert('email', 'Please enter a valid email address.').isEmail();
-  req.sanitize('email').normalizeEmail({ gmail_remove_dots: false });
+  req.assert('email', 'Please enter a valid email address.')
+    .isEmail();
+  req.sanitize('email')
+    .normalizeEmail({ gmail_remove_dots: false });
 
   const errors = req.validationErrors();
 
@@ -371,7 +417,9 @@ exports.postForgot = (req, res, next) => {
       });
 
   const sendForgotPasswordEmail = (user) => {
-    if (!user) { return; }
+    if (!user) {
+      return;
+    }
     const token = user.passwordResetToken;
     let transporter = nodemailer.createTransport({
       service: 'SendGrid',

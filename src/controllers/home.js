@@ -1,4 +1,5 @@
 const axios = require('axios');
+const moment = require('moment');
 
 const { Order } = require('../models/Orders');
 const Fee = require('../models/Fee');
@@ -19,8 +20,8 @@ exports.index = (req, res) => {
       return axios.get(`${API_BASE}/products`);
     })
     .then((response) => {
-	    items = response.data.products;
-	    return axios.get(`${API_BASE}/hotel/orders`);
+      items = response.data.products;
+      return axios.get(`${API_BASE}/hotel/orders`);
     })
     .then((response) => {
       orders = response.data.orders;
@@ -42,21 +43,51 @@ exports.index = (req, res) => {
 exports.plots = (req, res) => {
   Fee.find()
     .then((fees) => {
-	    let x = [];
-	    let y = [];
-	    let z = [];
-	    fees.forEach((fee) => {
-		    x.push(fee.day);
-		    y.push(fee.total);
-		    z.push(fee.numberOfOrders);
-	    });
-	    let data = [
-		    { x, y, type: 'line', title: 'Fees' },
-		    // { x, z, type: 'line', title: 'Orders' }
-      ];
-	    // TODO:: Add orders as their own plots
-	    res.json({ fees:[{ x, y, mode: 'lines', name: 'Fees' }], orders: [{ x, y:z, mode: 'lines', name: 'Orders' }] });
-    }).catch(e=> {
+      let days = [];
+      let tFee = [];
+      let orders = [];
+      // Get todays date,
+      // compare with the latest fee,
+      // get 7 days earlier records
+      const stime = moment().subtract(14, 'days');
+      fees.forEach((fee) => {
+        if (moment(fee.createdAt).isAfter(stime)) {
+          let index = days.indexOf(fee.day);
+          if(index > -1){
+            tFee[index] += fee.total;
+            orders[index] += fee.numberOfOrders;
+          } else {
+            days.push(fee.day);
+            tFee.push(fee.total);
+            orders.push(fee.numberOfOrders);
+          }
+        }
+      });
+      // TODO:: Add orders as their own plots
+      res.json({
+        fees: [{
+          x: days,
+          y: tFee,
+          mode: 'lines',
+          name: 'Fees',
+          line: {shape: 'linear'}, 
+          type: 'scatter',
+          mode: 'lines+markers',
+          connectgaps: true
+        }],
+        orders: [{
+          x: days,
+          y: orders,
+          mode: 'lines',
+          name: 'Orders',
+          line: {shape: 'linear'}, 
+          type: 'scatter',
+          mode: 'lines+markers',
+          connectgaps: true
+        }]
+      });
+    })
+    .catch(e => {
       console.log(e.message);
-  })
-}
+    });
+};

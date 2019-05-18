@@ -29,7 +29,7 @@ const UserSchema = new Schema({
   },
   role: {
     type: String,
-    default: "WAITER"
+    default: 'WAITER'
   },
   permissions: {
     type: Array,

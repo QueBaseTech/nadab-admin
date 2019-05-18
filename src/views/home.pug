@@ -24,21 +24,22 @@ block content
         h1.card-title= totalItems
         i.card-text.fas.fa-concierge-bell.fa-7x
 
-  div
-      h3 Stats
+  div.mb-5
+      h3.border-bottom.mb-5.pb-3 Fees
       .row
+        div.col-12
           div#feesGraph
           script.
             fetch("http://localhost:8080/plots").then( response => response.json() ).then( data => {
-                Plotly.newPlot('feesGraph', data.fees, { title: 'Nadab fees per day' });
+                Plotly.newPlot('feesGraph', [data.fees[0], data.orders[0]], { title: 'Fee and orders per day' });
             }).catch(e => {
                 console.log(e);
             });
 
 
-  div
+  div.mb-5
     br
-    h3 Hotels
+    h3.border-bottom.mb-5 Hotels
     table.table.table-striped.table-hover.table-bordered
       thead
         tr

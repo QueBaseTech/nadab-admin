@@ -10,7 +10,10 @@ exports.pay = async (req, res) => {
     await payment.save();
   } catch (e) {
     req.flash('success', { msg: `${payment.total} Payment added successfully` });
-    res.json({ success: false, message: e.message });
+    res.json({
+      success: false,
+      message: e.message
+    });
   }
   res.redirect(`/hotels/${req.params.hotelId}`);
 };

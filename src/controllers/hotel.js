@@ -43,11 +43,13 @@ exports.hotel = (req, res) => {
     })
     .then((staff) => {
       data.staff = staff;
-      return Payment.find({ hotel: data.hotel._id }).sort({ 'createdAt': -1 });
+      return Payment.find({ hotel: data.hotel._id })
+        .sort({ 'createdAt': -1 });
     })
     .then((payments) => {
       data.payments = payments;
-      return Fee.find({ hotel: data.hotel._id }).sort({ 'createdAt': -1 });
+      return Fee.find({ hotel: data.hotel._id })
+        .sort({ 'createdAt': -1 });
     })
     .then((fees) => {
       const payment = new Payment();
@@ -91,19 +93,22 @@ exports.suspend = (req, res) => {
 };
 
 exports.activate = (req, res) => {
-	const { id } = req.params;
-	Hotel.findByIdAndUpdate(id, { paymentStatus: 'PAID' }, { new: true })
-		.then((hotel) => {
-			res.redirect(`/hotels/${id}`);
-		})
-		.catch((e) => {
-			console.log(e.message);
-		});
+  const { id } = req.params;
+  Hotel.findByIdAndUpdate(id, { paymentStatus: 'PAID' }, { new: true })
+    .then((hotel) => {
+      res.redirect(`/hotels/${id}`);
+    })
+    .catch((e) => {
+      console.log(e.message);
+    });
 };
 
 exports.add = async (req, res) => {
   if (req.method === 'GET') {
-    res.render('hotel/add', { title: 'Add Hotel', hotel: new Hotel() });
+    res.render('hotel/add', {
+      title: 'Add Hotel',
+      hotel: new Hotel()
+    });
   }
 
   if (req.method === 'POST') {
@@ -121,10 +126,15 @@ exports.add = async (req, res) => {
         // TODO:: Send verification email ~ via a message broker
       })
       .catch((e) => {
-        e.message.toString().split(',').forEach((e) => {
-          req.flash('errors', { msg: e });
+        e.message.toString()
+          .split(',')
+          .forEach((e) => {
+            req.flash('errors', { msg: e });
+          });
+        res.render('hotel/add', {
+          title: 'Add Hotel',
+          hotel
         });
-        res.render('hotel/add', { title: 'Add Hotel', hotel });
       });
   }
 };

@@ -1,4 +1,5 @@
-const router = require('express').Router();
+const router = require('express')
+  .Router();
 const Payment = require('../models/Payment');
 
 router.post('/pay/:hotelId', async (req, res) => {
@@ -9,7 +10,7 @@ router.post('/pay/:hotelId', async (req, res) => {
 
 router.get('/pay/:hotelId', async (req, res) => {
 
-	res.json({ payment: 'paid' });
+  res.json({ payment: 'paid' });
 });
 
 module.exports = (app) => {

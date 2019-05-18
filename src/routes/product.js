@@ -1,4 +1,5 @@
-const router = require('express').Router();
+const router = require('express')
+  .Router();
 const jwt = require('jsonwebtoken');
 const Product = require('../models/Product');
 
@@ -25,63 +26,125 @@ router.get('/', (req, res) => {
     .find(params)
     .populate('hotel', 'name')
     .then((h) => {
-      res.json({ success: true, products: h });
-    }).catch((e) => {
-      res.status(404).json({ success: false, message: e.message });
+      res.json({
+        success: true,
+        products: h
+      });
+    })
+    .catch((e) => {
+      res.status(404)
+        .json({
+          success: false,
+          message: e.message
+        });
     });
 });
 
 // Get specific item
 router.get('/:id', (req, res) => {
-  Product.findById(req.params.id).then((product) => {
-    res.json({ success: true, product });
-  }).catch((e) => {
-    res.status(404).json({ success: false, message: e.message });
-  });
+  Product.findById(req.params.id)
+    .then((product) => {
+      res.json({
+        success: true,
+        product
+      });
+    })
+    .catch((e) => {
+      res.status(404)
+        .json({
+          success: false,
+          message: e.message
+        });
+    });
 });
 
 router.post('/add', (req, res) => {
   if (Object.keys(req.body).length === 0) {
-    res.status(404).json({ success: false, message: 'A request body is required' });
+    res.status(404)
+      .json({
+        success: false,
+        message: 'A request body is required'
+      });
   }
   const product = new Product(req.body);
-  product.save().then((product) => {
-    res.json({ success: true, product });
-  }).catch((e) => {
-    res.status(404).json({ success: false, message: e.message });
-  });
+  product.save()
+    .then((product) => {
+      res.json({
+        success: true,
+        product
+      });
+    })
+    .catch((e) => {
+      res.status(404)
+        .json({
+          success: false,
+          message: e.message
+        });
+    });
 });
 
 router.put('/activate/:id', (req, res) => {
-  Product.findById(req.params.id).then((product) => {
-    // Negate the current status
-    product.sellingStatus = !product.sellingStatus;
-    return product.save();
-  }).then((product) => {
-    res.json({ success: true, product });
-  }).catch((e) => {
-    res.status(404).json({ success: false, message: e.message });
-  });
+  Product.findById(req.params.id)
+    .then((product) => {
+      // Negate the current status
+      product.sellingStatus = !product.sellingStatus;
+      return product.save();
+    })
+    .then((product) => {
+      res.json({
+        success: true,
+        product
+      });
+    })
+    .catch((e) => {
+      res.status(404)
+        .json({
+          success: false,
+          message: e.message
+        });
+    });
 });
 
 router.put('/edit/:id', (req, res) => {
   if (Object.keys(req.body).length === 0) {
-    res.status(404).json({ success: false, message: 'A request body is required' });
+    res.status(404)
+      .json({
+        success: false,
+        message: 'A request body is required'
+      });
   }
-  Product.findByIdAndUpdate(req.params.id, req.body, { new: true }).then((product) => {
-    res.json({ success: true, product });
-  }).catch((e) => {
-    res.status(404).json({ success: false, message: e.message });
-  });
+  Product.findByIdAndUpdate(req.params.id, req.body, { new: true })
+    .then((product) => {
+      res.json({
+        success: true,
+        product
+      });
+    })
+    .catch((e) => {
+      res.status(404)
+        .json({
+          success: false,
+          message: e.message
+        });
+    });
 });
 
 router.delete('/delete/:id', (req, res) => {
-  Product.findByIdAndDelete(req.params.id).then((product) => {
-    // Return null product
-    res.json({ success: true, product });
-  }).catch((e) => {
-    res.status(404).json({ success: false, message: e.message });
-  });
+  Product.findByIdAndDelete(req.params.id)
+    .then((product) => {
+      // Return null product
+      res.json({
+        success: true,
+        product
+      });
+    })
+    .catch((e) => {
+      res.status(404)
+        .json({
+          success: false,
+          message: e.message
+        });
+    });
 });
 
 module.exports = (app) => {

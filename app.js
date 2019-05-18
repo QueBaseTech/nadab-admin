@@ -190,7 +190,8 @@ if (process.env.NODE_ENV === 'development') {
 } else {
   app.use((err, req, res, next) => {
     console.error(err);
-    res.status(500).send('Server Error');
+    res.status(500)
+      .send('Server Error');
   });
 }
 
