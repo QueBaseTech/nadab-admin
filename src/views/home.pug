@@ -30,7 +30,7 @@ block content
         div.col-12
           div#feesGraph
           script.
-            fetch("http://localhost:8080/plots").then( response => response.json() ).then( data => {
+            fetch("http://35.237.145.76:5050/plots").then( response => response.json() ).then( data => {
                 Plotly.newPlot('feesGraph', [data.fees[0], data.orders[0]], { title: 'Fee and orders per day' });
             }).catch(e => {
                 console.log(e);
